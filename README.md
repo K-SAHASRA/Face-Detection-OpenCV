@@ -5,7 +5,7 @@ The app detects faces in real-time from webcam input and marks attendance for kn
 
 ## Architecture Diagram
 
-![Architecture Diagram](resources/architecture-diagram.svg)
+![Architecture Diagram](Generated%20Image%20February%2023,%202026%20-%207_55PM.png)
 
 ## Features
 
