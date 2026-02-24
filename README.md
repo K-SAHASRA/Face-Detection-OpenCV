@@ -1,48 +1,73 @@
 # face-detection-opencv
-The Facial Recognition Attendance Tracker is a Python-based system designed to automate attendance tracking in educational institutions or any organization that requires monitoring attendance. It uses facial recognition to identify and mark the attendance of registered individuals in real-time.
 
-# Features
-Facial Recognition: Utilizes the face_recognition library to identify individuals based on their facial features.
-Real-time Monitoring: Tracks attendance as individuals pass in front of a webcam in real-time.
-Firebase Integration: Stores student information in a Firebase Realtime Database and student images in Firebase Cloud Storage.
-Dynamic Interface: Provides a dynamic graphical interface with student details, including name, major, ID, and attendance status.
-Attendance Recording: Records attendance based on configurable time intervals.
-Easy Setup: Simple setup with minimal dependencies.
-Customizable: Easily extendable for different use cases and custom UI designs.
-# Usage
-Clone the Repository
+Facial Recognition Attendance Tracker built with OpenCV, `face_recognition`, and Firebase.
+The app detects faces in real-time from webcam input and marks attendance for known users.
 
-git clone https://github.com/K-SAHASRA/face-detection-opencv.git
+## Architecture Diagram
 
-# Install Dependencies
+![Architecture Diagram](resources/architecture-diagram.svg)
 
-pip install -r requirements.txt
+## Features
 
+- Face detection + recognition using precomputed encodings.
+- Real-time webcam monitoring.
+- Firebase Realtime Database integration for student metadata and attendance.
+- Firebase Cloud Storage integration for student profile images.
+- OpenCV/cvzone dashboard UI with status modes.
+- Attendance update cooldown logic to prevent duplicate marking.
 
-# Configuration
+## Project Flow
 
-Add your Firebase service account key (serviceAccountKey.json) and ensure Firebase Realtime Database and Cloud Storage are set up correctly.
-Run the Tracker
+1. `add-data-database.py` seeds student metadata into Realtime Database.
+2. `EncodeGenerator.py` uploads student images and builds `encodeFile.p`.
+3. `main.py` loads encodings, runs webcam recognition, fetches student info, and updates attendance.
 
-# Usage Instructions
+## Repository Structure
 
-When the script is running, it will capture webcam input and recognize registered individuals.
-Detected individuals' attendance will be updated in real-time based on the configured time interval.
+- `main.py`: Main runtime loop for recognition + UI + attendance update.
+- `EncodeGenerator.py`: Enrollment script (image upload + embedding generation).
+- `add-data-database.py`: Realtime Database seed data script.
+- `images/`: Input student images used for encoding.
+- `resources/background.png`: Background UI canvas.
+- `resources/models/`: UI mode cards used by the dashboard.
+- `encodeFile.p`: Serialized face encodings + student IDs.
 
-# Contributing
-Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
+## Setup
 
-Fork the repository.
-Create a new branch for your feature or bug fix: git checkout -b feature-name.
-Make your changes and commit them: git commit -m 'Add feature'.
-Push to the branch: git push origin feature-name.
-Create a pull request on GitHub.
-License
-This project is licensed under the MIT License.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/K-SAHASRA/face-detection-opencv.git
+   cd face-detection-opencv
+   ```
+2. Install dependencies:
+   ```bash
+   pip install opencv-python face-recognition cvzone firebase-admin numpy
+   ```
+3. Add your Firebase service account key file and update scripts if needed:
+   - Current scripts expect `serviceAccountKey.json`.
+4. Ensure Firebase resources exist:
+   - Realtime Database path: `students/{id}`
+   - Cloud Storage path for images: `images/{id}.jpg`
 
-# Acknowledgments
-OpenCV
-face_recognition
-cvzone
-Firebase
+## Run
 
+1. Seed metadata:
+   ```bash
+   python add-data-database.py
+   ```
+2. Generate encodings:
+   ```bash
+   python EncodeGenerator.py
+   ```
+3. Start attendance tracker:
+   ```bash
+   python main.py
+   ```
+4. Press `d` to exit.
+
+## Acknowledgments
+
+- OpenCV
+- face_recognition
+- cvzone
+- Firebase
